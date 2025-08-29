@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculate GPA.JO</title>
+    <link rel="stylesheet" href="/style/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="title"><h1>حساب المعدل الفصلي و التراكمي
+            <br> <%= universityName %>
+            </h1>
+        </div>
+        <div>
+            <h3>
+                <a href="/home">Home</a>
+                <a href="/about">About</a>
+            </h3>
+        </div>
+        <div>
+            <input type="text" name ="Grade" placeholder="العلامة" required>
+            <select name="courseHours">
+                <option value="">عدد الساعات</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            </select>
+        </div>
+            <div>
+            <input type="text" name ="Grade" placeholder="العلامة" required>
+            <select name="courseHours">
+                <option value="">عدد الساعات</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            </select>
+        </div>
+        <div>
+            <input type="text" name ="Grade" placeholder="العلامة" required>
+            <select name="courseHours">
+                <option value="">عدد الساعات</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            </select>
+        </div>
+        <div class="addField"></div>
+        <div>
+            <input class="btn" type="button" value="إضافة مادة">
+        </div>
+        <div>
+            <input type="text" name="semesterAVG" placeholder="المعدل الفصلي" readonly>
+        </div>
+        <div>
+            <input type="text" name="cumulativeHours" placeholder="عدد الساعات التراكمية السابقة">
+            <input type="text" name="cumulativeGPA" placeholder="المعدل التراكمي السابق">
+            <input type="text" name="finalCumulativeGPA" placeholder="المعدل التراكمي النهائي" readonly>
+        </div>
+        <div>
+            <input class="submit" type="button" value="حساب المعدل">
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        let btn = document.querySelector('.btn');
+        let addField = document.querySelector('.addField');
+        let count = 3;// Initial number of fields
+        let maxFields = 18;// Maximum number of fields allowed
+
+        btn.addEventListener('click', () => {
+            if (count < maxFields) {
+                count++;
+                let newField = document.createElement('div');
+                newField.innerHTML = `
+                    <input type="text" name="Grade" placeholder="العلامة" required>
+                    <select name="courseHours">
+                        <option value="">عدد الساعات</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>`;
+                addField.appendChild(newField);
+            } else {
+                alert("لقد وصلت للحد الأقصى لعدد المواد");
+            }
+        });
+        const submitBtn = document.querySelector('.submit');
+
+        submitBtn.addEventListener('click', () => {
+            const grades = Array.from(document.querySelectorAll('input[name="Grade"]')).map(i => i.value);
+            const hours = Array.from(document.querySelectorAll('select[name="courseHours"]')).map(i => i.value);
+            let hasEmtyField = false;
+
+            for(let i=0 ; i<grades.length ; i++) {
+                if(grades[i] === '' || hours[i] === '') {
+                    hasEmtyField = true;
+                    break;
+                }
+            }
+
+            if(hasEmtyField === true) {
+                alert("يرجى ملئ جميع الحقول الخاصة بالعلامات و عدد الساعات");
+                hasEmtyField = false;
+                return;
+            }
+
+            const prevHours = document.querySelector('input[name="cumulativeHours"]').value || '';
+            const prevGPA = document.querySelector('input[name="cumulativeGPA"]').value || '';
+
+            if(prevHours === '' || prevGPA === ''){
+                alert("يرجى ملئ جميع الحقول الخاصة بالمعدل التراكمي السابق و عدد الساعات التراكمية السابقة");
+                return;
+            }
+
+            axios.post('/calculateGPAData', { grades, hours, prevHours, prevGPA })
+                .then(res => {
+                document.querySelector('input[name="semesterAVG"]').value = res.data.semesterGPA;
+                document.querySelector('input[name="finalCumulativeGPA"]').value = res.data.finalCumulativeGPA;
+            })
+            .catch(
+                err => alert(err.response.data.error || "حدث خطأ غير متوقع، يرجى المحاولة مرة أخرى.")
+            );
+        });
+    </script>
+</body>
+</html>

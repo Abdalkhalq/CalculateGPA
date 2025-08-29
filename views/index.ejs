@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculate GPA.JO</title>
+    <link rel="stylesheet" href="/style/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="title"><h1>Calculate GPA.JO <br>لحساب المعدل الفصلي و التراكمي</h1></div>
+        <div>
+          <h3><a href="/about">About</a></h3>
+        </div>
+        <div>
+          <div><p>للبدء اختر الجامعة </p></div>
+          <div>
+            <form action="/calculateGPA" method="post">
+              <select name="university" value="university">
+                <option value="">اختر الجامعة</option>
+                <option value="ju">الجامعة الأردنية</option>
+                <option value="mu">جامعة مؤتة</option>
+                <option value="yu">جامعة اليرموك</option>
+                <option value="bau">جامعة البلقاء التطبيقية</option>
+                <option value="just">جامعة العلوم والتكنولوجيا</option>
+              </select>
+              <input type="submit" value="إبدأ">
+            </form>
+        </div>
+    </div>
+</body>
+</html>
