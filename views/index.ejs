@@ -13,6 +13,9 @@
           <h3><a href="/about">About</a></h3>
         </div>
         <div>
+          <input type="button" value="Switch language" name="switchLanguage">
+        </div>
+        <div>
           <div><p>للبدء اختر الجامعة </p></div>
           <div>
             <form action="/calculateGPA" method="post">
@@ -24,9 +27,12 @@
                 <option value="bau">جامعة البلقاء التطبيقية</option>
                 <option value="just">جامعة العلوم والتكنولوجيا</option>
               </select>
+              <input type="hidden" name="language" id="languageInput">
               <input type="submit" value="إبدأ">
             </form>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/js/main.js"></script>
 </body>
 </html>

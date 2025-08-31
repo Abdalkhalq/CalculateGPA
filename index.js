@@ -24,40 +24,76 @@ app.get("/home" , (req , res) => {
 app.post("/calculateGPA", (req, res) => {
     universityName = req.body.university;
     console.log("University Name:", universityName);
+    const language = req.body.language;
+    console.log("Current Language:", language);
     if(universityName === "just") {
-    res.render("calc.ejs",{universityName:"لجامعة العلوم والتكنولوجيا الأردنية"});
+        if(language === 'ar') {
+            res.render("calc.ejs",{universityName:"لجامعة العلوم والتكنولوجيا الأردنية"});
+        }
+        else {
+            res.render("calc.ejs",{universityName:"for Jordan University of Science and Technology"});
+        }
     }
     else if(universityName === "ju") {
-        res.render("calc.ejs",{universityName:"للجامعة الأردنية"});
+        if(language === 'ar') {
+            res.render("calc.ejs",{universityName:"للجامعة الأردنية"});
+        }
+        else {
+            res.render("calc.ejs",{universityName:"for University of Jordan"});
+        }
     }
     else if(universityName === "yu") {
-        res.render("calc.ejs",{universityName:"لجامعة اليرموك"});
+        if(language === 'ar') {
+            res.render("calc.ejs",{universityName:"لجامعة اليرموك"});
+        }
+        else {
+            res.render("calc.ejs",{universityName:"for Yarmouk University"});
+        }
     }
     else if(universityName === "bau") {
-        res.render("calc.ejs",{universityName:"لجامعة البلقاء التطبيقية"});
+       if(language === 'ar') {
+            res.render("calc.ejs",{universityName:"لجامعة البلقاء التطبيقية"});
+        }
+        else {
+            res.render("calc.ejs",{universityName:"for Al-Balqa' Applied University"});
+        }
     }
     else if(universityName === "mu") {
-        res.render("calc.ejs",{universityName:"لجامعة مؤتة"});
+        if(language === 'ar') {
+            res.render("calc.ejs",{universityName:"لجامعة مؤتة"});
+        }
+        else {
+            res.render("calc.ejs",{universityName:"for Mutah University"});
+        }
     }
 });
 
 app.post('/calculateGPAData', (req, res) => {
-    const { grades, hours, prevHours, prevGPA } = req.body;
+    const { grades, hours, prevHours, prevGPA ,currentLang } = req.body;
     let currentSemesterTotalHours  = 0;
     let semesterGPA = 0;
     let finalCumulativeGPA = 0;
 
     if(parseFloat(prevGPA) < 0 || parseInt(prevHours) < 0 || isNaN(parseFloat(prevGPA)) || isNaN(parseInt(prevHours))) {
+        if(currentLang === 'en') {
+            return res.status(400).json({ error: "Cumulative GPA and Cumulative Hours must be positive numbers." });
+        }
         return res.status(400).json({ error: "المعدل التراكمي وعدد الساعات التراكمية يجب أن تكون أرقاماً موجبة." });
     }
 
     if(universityName === "yu" || universityName === "mu") {
         for(let i=0 ; i<grades.length ; i++) {
                 if(isNaN(grades[i]) || grades[i] < 0 || grades[i] > 100) {
-                    return res.json({error: "يرجى إدخال علامات صحيحة بين 0 و 100"});
+                    if(currentLang === 'en') {
+                        return res.status(400).json({error: "Please enter valid grades between 0 and 100"});
+                    }
+                    return res.status(400).json({error: "يرجى إدخال علامات صحيحة بين 0 و 100"});
                 }
                 if(isNaN(hours[i]) || hours[i] <= 0 || hours[i] > 4) {
-                    return res.json({error: "يرجى إدخال عدد ساعات صحيح بين 1 و 4"});
+                    if(currentLang === 'en') {
+                        return res.status(400).json({error: "Please enter valid course hours between 1 and 4"});
+                    }
+                    return res.status(400).json({error: "يرجى إدخال عدد ساعات صحيح بين 1 و 4"});
                 }
         }
     }
