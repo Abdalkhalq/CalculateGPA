@@ -97,6 +97,30 @@ app.post('/calculateGPAData', (req, res) => {
                 }
         }
     }
+
+    if(universityName === "just") {
+        const validGrades = ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-', 'F'];
+        for(let i=0 ; i<grades.length ; i++) {
+            if(!validGrades.includes(grades[i].toUpperCase())) {
+                if(currentLang === 'en') {
+                    return res.status(400).json({error: "Please enter valid grades (A+, A, A-, B+, B, B-, C+, C, C-, D+, D, D-, F)"});
+                }
+                return res.status(400).json({error: "يرجى إدخال علامات صحيحة (A+, A, A-, B+, B, B-, C+, C, C-, D+, D, D-, F)"});
+            }
+        }
+    }
+
+    if(universityName === "ju" || universityName === "bau") {
+        const validGrades = ['A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-', 'F'];
+        for(let i=0 ; i<grades.length ; i++) {
+            if(!validGrades.includes(grades[i].toUpperCase())) {
+                if(currentLang === 'en') {
+                    return res.status(400).json({error: "Please enter valid grades (A, A-, B+, B, B-, C+, C, C-, D+, D, D-, F)"});
+                }
+                return res.status(400).json({error: "يرجى إدخال علامات صحيحة (A, A-, B+, B, B-, C+, C, C-, D+, D, D-, F)"});
+            }
+        }
+    }
     
    if(universityName === "just") {
         currentSemesterTotalHours  = totalHours(hours);
